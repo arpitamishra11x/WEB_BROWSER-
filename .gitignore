@@ -1,0 +1,85 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Wheels / eggs
+*.egg
+*.whl
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pillow / temporary images
+__pillow_cache__/
+*.ps
+*.psd
+
+# Environment files and secrets
+.env
+*.env
+*.key
+*.pem
+
+# macOS specific
+.AppleDouble
+.LSOverride
+
+# Windows specific
+ehthumbs.db
+Icon?
+
+# Misc
+*.bak
+*.swp
