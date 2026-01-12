@@ -5,14 +5,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QToolBar, QAction, QLineEdit,
-    QTabWidget, QVBoxLayout, QStatusBar, QFileDialog,
+    QTabWidget, QStatusBar, QFileDialog,
     QMessageBox
 )
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 # ----------------- App Constants -----------------
 APP_NAME = "PyBrowser"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 BOOKMARKS_FILE = "bookmarks.json"
 HOME_PAGE = "https://www.google.com"
 
@@ -42,12 +42,11 @@ class MainWindow(QMainWindow):
         navtb = QToolBar("Navigation")
         navtb.setIconSize(QtCore.QSize(18, 18))
         self.addToolBar(navtb)
-
         self._add_nav_actions(navtb)
 
         # ----------------- URL Bar -----------------
         self.urlbar = QLineEdit()
-        self.urlbar.setPlaceholderText("Enter URL...")
+        self.urlbar.setPlaceholderText("Search or enter URL...")
         self.urlbar.returnPressed.connect(self.navigate_to_url_from_bar)
         navtb.addWidget(self.urlbar)
 
@@ -68,7 +67,7 @@ class MainWindow(QMainWindow):
 
         # ----------------- Status Bar -----------------
         self.status = QStatusBar()
-        self.status.showMessage("Ready")
+        self.status.showMessage("Ready | PyBrowser")
         self.setStatusBar(self.status)
 
         # ----------------- Shortcuts -----------------
@@ -119,6 +118,11 @@ class MainWindow(QMainWindow):
         if isinstance(qurl, str):
             qurl = QUrl(qurl)
 
+        for i in range(self.tabs.count()):
+            if self.tabs.widget(i).url() == qurl:
+                self.tabs.setCurrentIndex(i)
+                return
+
         browser = BrowserTab()
         browser.setUrl(qurl)
 
@@ -131,9 +135,12 @@ class MainWindow(QMainWindow):
             self.tabs.setCurrentIndex(index)
 
     def close_current_tab(self, index=None):
-        if self.tabs.count() < 2:
-            self.close()
+        if self.tabs.count() == 1:
+            reply = QMessageBox.question(self, "Quit", "Close the browser?")
+            if reply == QMessageBox.Yes:
+                self.close()
             return
+
         if index is None:
             index = self.tabs.currentIndex()
         self.tabs.removeTab(index)
@@ -159,8 +166,15 @@ class MainWindow(QMainWindow):
         text = self.urlbar.text().strip()
         if not text:
             return
+
+        if " " in text or "." not in text:
+            search_url = f"https://www.google.com/search?q={text.replace(' ', '+')}"
+            self.current_browser().setUrl(QUrl(search_url))
+            return
+
         if not text.startswith(("http://", "https://")):
             text = "https://" + text
+
         self.current_browser().setUrl(QUrl(text))
 
     def update_urlbar(self, qurl, browser):
@@ -172,20 +186,21 @@ class MainWindow(QMainWindow):
     def update_progress(self, progress):
         self.status.showMessage(f"Loading... {progress}%")
         if progress == 100:
-            self.status.showMessage("Ready")
+            self.status.showMessage("Ready | PyBrowser")
 
     # ======================================================
     # Bookmarks
     # ======================================================
     def load_bookmarks(self):
-        if os.path.exists(BOOKMARKS_FILE):
-            try:
+        try:
+            if os.path.exists(BOOKMARKS_FILE):
                 with open(BOOKMARKS_FILE, "r", encoding="utf-8") as f:
                     self.bookmarks = json.load(f)
-            except Exception:
+            else:
                 self.bookmarks = []
-        else:
+        except (json.JSONDecodeError, IOError):
             self.bookmarks = []
+            QMessageBox.warning(self, "Bookmarks", "Bookmarks file was reset due to an error.")
 
     def save_bookmarks(self):
         with open(BOOKMARKS_FILE, "w", encoding="utf-8") as f:
@@ -255,14 +270,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
 
