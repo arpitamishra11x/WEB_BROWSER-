@@ -5,16 +5,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QToolBar, QAction, QLineEdit,
-    QTabWidget, QStatusBar, QFileDialog,
-    QMessageBox
+    QTabWidget, QStatusBar, QFileDialog, QMessageBox
 )
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 # ----------------- App Constants -----------------
 APP_NAME = "PyBrowser"
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.3.0"
 BOOKMARKS_FILE = "bookmarks.json"
 HOME_PAGE = "https://www.google.com"
+DEFAULT_STATUS = "Ready | PyBrowser"
 
 
 class BrowserTab(QWebEngineView):
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
 
         # ----------------- Status Bar -----------------
         self.status = QStatusBar()
-        self.status.showMessage("Ready | PyBrowser")
+        self.status.showMessage(DEFAULT_STATUS)
         self.setStatusBar(self.status)
 
         # ----------------- Shortcuts -----------------
@@ -115,6 +115,7 @@ class MainWindow(QMainWindow):
     # Tab Management
     # ======================================================
     def add_new_tab(self, qurl, switch=False):
+        """Create and add a new browser tab."""
         if isinstance(qurl, str):
             qurl = QUrl(qurl)
 
@@ -136,25 +137,38 @@ class MainWindow(QMainWindow):
 
     def close_current_tab(self, index=None):
         if self.tabs.count() == 1:
-            reply = QMessageBox.question(self, "Quit", "Close the browser?")
+            reply = QMessageBox.question(
+                self, "Quit", "Close the browser?",
+                QMessageBox.Yes | QMessageBox.No
+            )
             if reply == QMessageBox.Yes:
                 self.close()
             return
 
         if index is None:
             index = self.tabs.currentIndex()
-        self.tabs.removeTab(index)
+
+        reply = QMessageBox.question(
+            self, "Close Tab", "Close this tab?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if reply == QMessageBox.Yes:
+            self.tabs.removeTab(index)
 
     def current_browser(self):
         return self.tabs.currentWidget()
 
     def current_tab_changed(self, _):
-        self.update_urlbar(self.current_browser().url(), self.current_browser())
+        browser = self.current_browser()
+        if browser:
+            self.update_urlbar(browser.url(), browser)
 
     def update_tab_title(self, browser):
         index = self.tabs.indexOf(browser)
         title = browser.title() or browser.url().host()
         self.tabs.setTabText(index, title)
+        self.tabs.setTabIcon(index, browser.icon())
 
     # ======================================================
     # Navigation
@@ -167,13 +181,11 @@ class MainWindow(QMainWindow):
         if not text:
             return
 
-        if " " in text or "." not in text:
-            search_url = f"https://www.google.com/search?q={text.replace(' ', '+')}"
-            self.current_browser().setUrl(QUrl(search_url))
-            return
-
         if not text.startswith(("http://", "https://")):
-            text = "https://" + text
+            if "." in text and " " not in text:
+                text = "https://" + text
+            else:
+                text = f"https://www.google.com/search?q={text.replace(' ', '+')}"
 
         self.current_browser().setUrl(QUrl(text))
 
@@ -184,9 +196,10 @@ class MainWindow(QMainWindow):
         self.urlbar.setCursorPosition(0)
 
     def update_progress(self, progress):
-        self.status.showMessage(f"Loading... {progress}%")
-        if progress == 100:
-            self.status.showMessage("Ready | PyBrowser")
+        if progress < 100:
+            self.status.showMessage(f"Loading... {progress}%")
+        else:
+            self.status.showMessage(DEFAULT_STATUS)
 
     # ======================================================
     # Bookmarks
@@ -203,8 +216,11 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Bookmarks", "Bookmarks file was reset due to an error.")
 
     def save_bookmarks(self):
-        with open(BOOKMARKS_FILE, "w", encoding="utf-8") as f:
-            json.dump(self.bookmarks, f, indent=2)
+        try:
+            with open(BOOKMARKS_FILE, "w", encoding="utf-8") as f:
+                json.dump(self.bookmarks, f, indent=2)
+        except IOError:
+            QMessageBox.warning(self, "Error", "Failed to save bookmarks.")
 
     def refresh_bookmarks_menu(self):
         for action in self.bookmarks_menu.actions()[2:]:
@@ -256,7 +272,10 @@ class MainWindow(QMainWindow):
         self.urlbar.selectAll()
 
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, "Quit", "Exit browser?")
+        reply = QMessageBox.question(
+            self, "Quit", "Exit browser?",
+            QMessageBox.Yes | QMessageBox.No
+        )
         event.accept() if reply == QMessageBox.Yes else event.ignore()
 
 
@@ -270,4 +289,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
