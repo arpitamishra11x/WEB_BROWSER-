@@ -5,11 +5,11 @@ What this is!!
 - A small multi-tab web browser built with PyQt5 + QtWebEngine.
 - Useful as a learning project or starting point for a custom browser.
 
-Files~
+Files ~
 - main.py         # the browser application
 - requirements.txt
 
-Requirements~
+Requirements ~
 - Python 3.8+
 - pip
 
