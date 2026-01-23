@@ -5,18 +5,18 @@ What this is!!
 - A small multi-tab web browser built with PyQt5 + QtWebEngine.
 - Useful as a learning project or starting point for a custom browser.
 
-Files !
+Files !!
 - main.py         # the browser application
 - requirements.txt
 
-Requirements !
+Requirements !!
 - Python 3.8+
 - pip
 
-Install !
+Install !1
 1) Create and activate a virtual environment (recommended):
 
-PowerShell (Windows) !
+PowerShell (Windows) !1
 ```powershell
 cd "C:\path\to\project"
 py -3 -m venv .venv
@@ -24,7 +24,7 @@ py -3 -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 
-📌 Features
+📌 Features !!
 
 ✔ Multi-tab browsing
 ✔ URL bar with smart search handling
@@ -36,14 +36,14 @@ python -m pip install -r requirements.txt
 ✔ Status bar with loading progress
 ✔ Confirmation dialogs for tab and app closing.
 
-🛠️ Technologies Used
+🛠️ Technologies Used !!
 
 -Programming Language: Python 3
 -GUI Framework: PyQt5
 -Web Rendering Engine: Qt WebEngine
 -Data Storage: JSON (for bookmarks)
 
-🧭 Application Overview
+🧭 Application Overview !!
 🔹 Main Window
 Displays tabs, toolbar, menu bar, and status bar
 Supports multiple open web pages simultaneously
@@ -67,7 +67,7 @@ Each tab loads a webpage independently
 Duplicate URLs are prevented from opening twice
 Tabs show page title and favicon
 
-⭐ Bookmarks System
+⭐ Bookmarks System !!
 
 Bookmarks are saved in a bookmarks.json file
 Each bookmark stores:
