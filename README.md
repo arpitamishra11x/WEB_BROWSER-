@@ -67,7 +67,7 @@ Each tab loads a webpage independently
 Duplicate URLs are prevented from opening twice
 Tabs show page title and favicon
 
-⭐ Bookmarks System !!
+⭐ Bookmarks System ~
 
 Bookmarks are saved in a bookmarks.json file
 Each bookmark stores:
