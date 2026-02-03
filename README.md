@@ -43,7 +43,7 @@ python -m pip install -r requirements.txt
 -Web Rendering Engine: Qt WebEngine
 -Data Storage: JSON (for bookmarks)
 
-🧭 Application Overview !!
+🧭 Application Overview ~
 🔹 Main Window
 Displays tabs, toolbar, menu bar, and status bar
 Supports multiple open web pages simultaneously
