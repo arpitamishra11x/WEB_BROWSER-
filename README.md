@@ -36,7 +36,7 @@ python -m pip install -r requirements.txt
 ✔ Status bar with loading progress
 ✔ Confirmation dialogs for tab and app closing.
 
-🛠️ Technologies Used !!
+🛠️ Technologies Used ~
 
 -Programming Language: Python 3
 -GUI Framework: PyQt5
