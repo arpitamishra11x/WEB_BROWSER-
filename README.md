@@ -13,7 +13,7 @@ Requirements !!
 - Python 3.8+
 - pip
 
-Install !1
+Install ~
 1) Create and activate a virtual environment (recommended):
 
 PowerShell (Windows) !1
