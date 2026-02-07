@@ -16,7 +16,7 @@ Requirements !!
 Install ~
 1) Create and activate a virtual environment (recommended):
 
-PowerShell (Windows) !1
+PowerShell (Windows) ~
 ```powershell
 cd "C:\path\to\project"
 py -3 -m venv .venv
