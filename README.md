@@ -9,7 +9,7 @@ Files !!
 - main.py         # the browser application
 - requirements.txt
 
-Requirements !!
+Requirements ~
 - Python 3.8+
 - pip
 
