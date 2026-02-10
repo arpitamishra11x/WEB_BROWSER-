@@ -1,7 +1,7 @@
 ```markdown
 PyBrowser — minimal web browser in Python (PyQt)
 
-What this is!!
+What this is ~
 - A small multi-tab web browser built with PyQt5 + QtWebEngine.
 - Useful as a learning project or starting point for a custom browser.
 
