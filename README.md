@@ -75,3 +75,4 @@ Page title
 Page URL
 Bookmarks persist even after closing the browser
 Duplicate bookmarks are prevented
+.................................................................................................................................................................
